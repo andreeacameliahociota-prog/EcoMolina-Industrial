@@ -3,50 +3,71 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EcoMolina Industrial | Ingeniería Sostenible</title>
+    <title>EcoMolina Industrial - Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <style> #map { height: 500px; width: 100%; border-radius: 8px; } </style>
 </head>
-<body class="bg-gray-50 text-gray-800 font-sans">
+<body class="bg-gray-100 flex h-screen">
 
-    <nav class="bg-blue-900 p-4 text-white shadow-lg">
-        <div class="container mx-auto flex justify-between items-center">
-            <h1 class="text-xl font-bold tracking-tight">ECOMOLINA <span class="text-green-400">INDUSTRIAL</span></h1>
-            <div class="space-x-4">
-                <a href="#" class="hover:text-green-400">Inicio</a>
-                <a href="#" class="hover:text-green-400">Servicios</a>
-                <a href="#" class="hover:text-green-400">Contacto</a>
+    <aside class="w-64 bg-emerald-900 text-white flex flex-col p-6 space-y-6">
+        <div class="flex items-center space-x-2">
+            <div class="bg-white p-1 rounded-full text-emerald-900 font-bold">E</div>
+            <h1 class="text-xl font-bold tracking-wider">ECOMOLINA</h1>
+        </div>
+        <nav class="flex-1 space-y-2">
+            <a href="#" class="block p-3 bg-emerald-700 rounded-lg">🏠 Inicio</a>
+            <a href="#" class="block p-3 hover:bg-emerald-800 rounded-lg">📍 Mapa en Vivo</a>
+            <a href="#" class="block p-3 hover:bg-emerald-800 rounded-lg">📊 Estadísticas</a>
+            <a href="#" class="block p-3 hover:bg-emerald-800 rounded-lg">📋 Reportes ESG</a>
+            <a href="#" class="block p-3 hover:bg-emerald-800 rounded-lg">⚙️ Configuración</a>
+        </nav>
+    </aside>
+
+    <main class="flex-1 overflow-y-auto p-8">
+        <header class="mb-8">
+            <h2 class="text-2xl font-bold text-gray-800 uppercase tracking-tight">Mapa en Vivo - Polígono La Polvorista</h2>
+        </header>
+
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+            <div class="bg-white p-6 rounded-xl shadow-sm border">
+                <p class="text-xs text-gray-500 uppercase font-bold">Recogida Hoy</p>
+                <h3 class="text-2xl font-bold text-gray-800">15 Contenedores</h3>
+            </div>
+            <div class="bg-white p-6 rounded-xl shadow-sm border">
+                <p class="text-xs text-gray-500 uppercase font-bold">Ahorro Mensual</p>
+                <h3 class="text-2xl font-bold text-emerald-600">€1,200</h3>
+            </div>
+            <div class="bg-white p-6 rounded-xl shadow-sm border">
+                <p class="text-xs text-gray-500 uppercase font-bold">CO2 Evitado</p>
+                <h3 class="text-2xl font-bold text-emerald-600">85 kg</h3>
+            </div>
+            <div class="bg-white p-6 rounded-xl shadow-sm border text-center">
+                <div class="inline-block relative w-16 h-16 border-4 border-emerald-500 rounded-full leading-[4rem] font-bold text-emerald-600">
+                    89%
+                </div>
+                <p class="text-xs mt-2 uppercase font-bold">Optimización</p>
             </div>
         </div>
-    </nav>
 
-    <header class="bg-white py-20 border-b">
-        <div class="container mx-auto text-center px-4">
-            <h2 class="text-4xl md:text-5xl font-extrabold text-blue-900 mb-4">Soluciones Industriales para un Futuro Sostenible</h2>
-            <p class="text-lg text-gray-600 mb-8">Especialistas en procesos de eficiencia energética y gestión de recursos.</p>
-            <button class="bg-green-500 hover:bg-green-600 text-white px-8 py-3 rounded-full font-bold transition">Saber más</button>
+        <div class="bg-white p-4 rounded-xl shadow-md border">
+            <div id="map"></div>
         </div>
-    </header>
+    </main>
 
-    <section class="py-16 container mx-auto px-4">
-        <div class="grid md:grid-cols-3 gap-8">
-            <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-blue-900">
-                <h3 class="text-xl font-bold mb-2">Optimización</h3>
-                <p class="text-gray-600">Mejoramos el rendimiento de maquinaria industrial con bajo impacto ambiental.</p>
-            </div>
-            <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-blue-900">
-                <h3 class="text-xl font-bold mb-2">Consultoría</h3>
-                <p class="text-gray-600">Asesoramiento técnico en normativas ambientales y eficiencia.</p>
-            </div>
-            <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-blue-900">
-                <h3 class="text-xl font-bold mb-2">Mantenimiento</h3>
-                <p class="text-gray-600">Soporte técnico especializado con enfoque en sostenibilidad.</p>
-            </div>
-        </div>
-    </section>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        // Inicializa el mapa centrado en Molina de Segura
+        var map = L.map('map').setView([38.05, -1.21], 15);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
 
-    <footer class="bg-gray-900 text-white py-8 text-center">
-        <p>&copy; 2024 EcoMolina Industrial. Todos los derechos reservados.</p>
-    </footer>
-
+        // Ejemplo de marcador (chincheta) según tus sensores LoRaWAN
+        var marker = L.circleMarker([38.052, -1.213], {
+            color: 'red',
+            fillColor: '#f03',
+            fillOpacity: 0.8,
+            radius: 10
+        }).addTo(map).bindPopup('Contenedor al 90% (Urgente)');
+    </script>
 </body>
 </html>
