@@ -3,71 +3,95 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EcoMolina Industrial - Dashboard</title>
+    <title>EcoMolina Industrial - Dashboard de Gestión</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <style> #map { height: 500px; width: 100%; border-radius: 8px; } </style>
+    <style>
+        #map { height: 500px; width: 100%; border-radius: 12px; z-index: 1; }
+        .sidebar { background-color: #16423C; } /* Verde oscuro industrial de tu diseño */
+    </style>
 </head>
-<body class="bg-gray-100 flex h-screen">
+<body class="bg-gray-50 flex h-screen font-sans">
 
-    <aside class="w-64 bg-emerald-900 text-white flex flex-col p-6 space-y-6">
-        <div class="flex items-center space-x-2">
-            <div class="bg-white p-1 rounded-full text-emerald-900 font-bold">E</div>
-            <h1 class="text-xl font-bold tracking-wider">ECOMOLINA</h1>
+    <aside class="w-64 sidebar text-white flex flex-col p-6 shadow-xl">
+        <div class="mb-10 flex items-center space-x-3">
+            <div class="bg-white text-emerald-900 font-bold p-2 rounded-lg text-xl">E</div>
+            <h1 class="text-lg font-bold tracking-widest uppercase">ECOMOLINA</h1>
         </div>
-        <nav class="flex-1 space-y-2">
-            <a href="#" class="block p-3 bg-emerald-700 rounded-lg">🏠 Inicio</a>
-            <a href="#" class="block p-3 hover:bg-emerald-800 rounded-lg">📍 Mapa en Vivo</a>
-            <a href="#" class="block p-3 hover:bg-emerald-800 rounded-lg">📊 Estadísticas</a>
-            <a href="#" class="block p-3 hover:bg-emerald-800 rounded-lg">📋 Reportes ESG</a>
-            <a href="#" class="block p-3 hover:bg-emerald-800 rounded-lg">⚙️ Configuración</a>
+        
+        <nav class="flex-1 space-y-4 text-sm font-medium">
+            <a href="#" class="flex items-center space-x-3 p-3 bg-emerald-800 rounded-lg"><span>🏠</span> <span>Inicio</span></a>
+            <a href="#" class="flex items-center space-x-3 p-3 hover:bg-emerald-700 rounded-lg transition"><span>📍</span> <span>Mapa en Vivo</span></a>
+            <a href="#" class="flex items-center space-x-3 p-3 hover:bg-emerald-700 rounded-lg transition"><span>📊</span> <span>Estadísticas</span></a>
+            <a href="#" class="flex items-center space-x-3 p-3 hover:bg-emerald-700 rounded-lg transition"><span>📄</span> <span>Reportes ESG</span></a>
+            <a href="#" class="flex items-center space-x-3 p-3 hover:bg-emerald-700 rounded-lg transition"><span>⚙️</span> <span>Configuración</span></a>
         </nav>
+        
+        <div class="mt-auto pt-6 border-t border-emerald-800 text-xs text-emerald-300">
+            © 2026 EcoMolina Industrial
+        </div>
     </aside>
 
     <main class="flex-1 overflow-y-auto p-8">
         <header class="mb-8">
-            <h2 class="text-2xl font-bold text-gray-800 uppercase tracking-tight">Mapa en Vivo - Polígono La Polvorista</h2>
+            <h2 class="text-2xl font-extrabold text-gray-800 uppercase">MAPA EN VIVO - POLÍGONO LA POLVORISTA</h2>
+            <p class="text-gray-500 text-sm">Monitoreo en tiempo real de contenedores inteligentes</p>
         </header>
 
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-            <div class="bg-white p-6 rounded-xl shadow-sm border">
-                <p class="text-xs text-gray-500 uppercase font-bold">Recogida Hoy</p>
-                <h3 class="text-2xl font-bold text-gray-800">15 Contenedores</h3>
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                <p class="text-xs font-bold text-gray-400 uppercase mb-1">Recogida Hoy</p>
+                <h3 class="text-2xl font-black text-gray-800">15 Contenedores</h3>
             </div>
-            <div class="bg-white p-6 rounded-xl shadow-sm border">
-                <p class="text-xs text-gray-500 uppercase font-bold">Ahorro Mensual</p>
-                <h3 class="text-2xl font-bold text-emerald-600">€1,200</h3>
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                <p class="text-xs font-bold text-gray-400 uppercase mb-1">Ahorro Mensual</p>
+                <h3 class="text-2xl font-black text-emerald-600">€1,200</h3>
             </div>
-            <div class="bg-white p-6 rounded-xl shadow-sm border">
-                <p class="text-xs text-gray-500 uppercase font-bold">CO2 Evitado</p>
-                <h3 class="text-2xl font-bold text-emerald-600">85 kg</h3>
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                <p class="text-xs font-bold text-gray-400 uppercase mb-1">Ahorro Mensual (CO2)</p>
+                <h3 class="text-2xl font-black text-emerald-600">85 kg</h3>
             </div>
-            <div class="bg-white p-6 rounded-xl shadow-sm border text-center">
-                <div class="inline-block relative w-16 h-16 border-4 border-emerald-500 rounded-full leading-[4rem] font-bold text-emerald-600">
-                    89%
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col items-center">
+                <div class="relative flex items-center justify-center">
+                    <svg class="w-16 h-16">
+                        <circle class="text-gray-200" stroke-width="5" stroke="currentColor" fill="transparent" r="28" cx="32" cy="32"/>
+                        <circle class="text-blue-500" stroke-width="5" stroke-dasharray="175" stroke-dashoffset="30" stroke-linecap="round" stroke="currentColor" fill="transparent" r="28" cx="32" cy="32"/>
+                    </svg>
+                    <span class="absolute text-sm font-bold">89%</span>
                 </div>
-                <p class="text-xs mt-2 uppercase font-bold">Optimización</p>
+                <p class="text-[10px] font-bold text-gray-400 uppercase mt-2">CO2 EVITADO</p>
             </div>
         </div>
 
-        <div class="bg-white p-4 rounded-xl shadow-md border">
+        <div class="bg-white p-2 rounded-2xl shadow-lg border border-gray-200">
             <div id="map"></div>
         </div>
     </main>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
-        // Inicializa el mapa centrado en Molina de Segura
-        var map = L.map('map').setView([38.05, -1.21], 15);
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+        // Coordenadas del Polígono La Polvorista, Molina de Segura
+        var poligonoLat = 38.0615;
+        var poligonoLon = -1.1965;
 
-        // Ejemplo de marcador (chincheta) según tus sensores LoRaWAN
-        var marker = L.circleMarker([38.052, -1.213], {
-            color: 'red',
-            fillColor: '#f03',
-            fillOpacity: 0.8,
-            radius: 10
-        }).addTo(map).bindPopup('Contenedor al 90% (Urgente)');
+        var map = L.map('map').setView([poligonoLat, poligonoLon], 16);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap'
+        }).addTo(map);
+
+        // Marcadores basados en tus chinchetas de colores
+        // ROJO: Recogida urgente (90%)
+        L.circleMarker([38.0620, -1.1970], { color: 'red', fillColor: '#f03', fillOpacity: 0.9, radius: 12 })
+            .addTo(map).bindPopup('<b>Contenedor 01</b><br>Nivel: 90% (Urgente)');
+
+        // AMARILLO: Pendiente (50%)
+        L.circleMarker([38.0610, -1.1950], { color: 'orange', fillColor: '#ff0', fillOpacity: 0.9, radius: 10 })
+            .addTo(map).bindPopup('<b>Contenedor 02</b><br>Nivel: 50% (Pendiente)');
+
+        // VERDE: Vacío
+        L.circleMarker([38.0630, -1.1980], { color: 'green', fillColor: '#0f0', fillOpacity: 0.9, radius: 10 })
+            .addTo(map).bindPopup('<b>Contenedor 03</b><br>Nivel: 10% (Vacío)');
     </script>
 </body>
 </html>
