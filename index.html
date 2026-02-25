@@ -3,74 +3,84 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EcoMolina Industrial - Dashboard Interactivo</title>
+    <title>EcoMolina Industrial - Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         #map { height: 500px; width: 100%; border-radius: 12px; }
-        .sidebar { background-color: #16423C; }
-        .content-section { display: none; }
-        .content-section.active { display: block; }
+        .sidebar { background-color: #16423C; } /* Verde oscuro del diseño */
+        .seccion { display: none; } /* Escondemos las secciones por defecto */
+        .seccion.activa { display: block; } /* Solo mostramos la sección activa */
     </style>
 </head>
-<body class="bg-gray-50 flex h-screen font-sans">
+<body class="bg-gray-100 flex h-screen font-sans">
 
     <aside class="w-64 sidebar text-white flex flex-col p-6 shadow-xl">
         <div class="mb-10 flex items-center space-x-3">
             <div class="bg-white text-emerald-900 font-bold p-2 rounded-lg text-xl">E</div>
-            <h1 class="text-lg font-bold tracking-widest uppercase">ECOMOLINA</h1>
+            <h1 class="text-lg font-bold tracking-widest">ECOMOLINA</h1>
         </div>
         
         <nav class="flex-1 space-y-4 text-sm font-medium">
-            <button onclick="showSection('mapa')" class="w-full flex items-center space-x-3 p-3 hover:bg-emerald-700 rounded-lg transition"><span>📍</span> <span>Mapa en Vivo</span></button>
-            <button onclick="showSection('estadisticas')" class="w-full flex items-center space-x-3 p-3 hover:bg-emerald-700 rounded-lg transition"><span>📊</span> <span>Estadísticas</span></button>
-            <button onclick="showSection('configuracion')" class="w-full flex items-center space-x-3 p-3 hover:bg-emerald-700 rounded-lg transition"><span>⚙️</span> <span>Configuración</span></button>
+            <button onclick="cambiarSeccion('mapa')" class="w-full text-left flex items-center space-x-3 p-3 hover:bg-emerald-700 rounded-lg transition">
+                <span>📍</span> <span>Mapa en Vivo</span>
+            </button>
+            <button onclick="cambiarSeccion('stats')" class="w-full text-left flex items-center space-x-3 p-3 hover:bg-emerald-700 rounded-lg transition">
+                <span>📊</span> <span>Estadísticas</span>
+            </button>
+            <button onclick="cambiarSeccion('config')" class="w-full text-left flex items-center space-x-3 p-3 hover:bg-emerald-700 rounded-lg transition">
+                <span>⚙️</span> <span>Configuración</span>
+            </button>
         </nav>
     </aside>
 
     <main class="flex-1 overflow-y-auto p-8">
         
-        <section id="mapa" class="content-section active">
-            <header class="mb-8">
-                <h2 class="text-2xl font-extrabold text-gray-800 uppercase">MAPA EN VIVO - POLÍGONO LA POLVORISTA</h2>
-            </header>
+        <section id="mapa" class="seccion activa">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6 uppercase">Mapa en Vivo - Polígono La Polvorista</h2>
+            
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 text-center">
-                    <p class="text-xs font-bold text-gray-400 uppercase">Ahorro Mensual</p>
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                    <p class="text-xs font-bold text-gray-400 uppercase">Ahorro Mensual [cite: 13, 30]</p>
                     <h3 class="text-2xl font-black text-emerald-600">€1,200</h3>
                 </div>
-                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 text-center">
-                    <p class="text-xs font-bold text-gray-400 uppercase">CO2 Evitado</p>
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                    <p class="text-xs font-bold text-gray-400 uppercase">CO2 Evitado [cite: 14, 35]</p>
                     <h3 class="text-2xl font-black text-emerald-600">85 kg</h3>
                 </div>
-                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 text-center">
-                    <p class="text-xs font-bold text-gray-400 uppercase">Optimización</p>
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                    <p class="text-xs font-bold text-gray-400 uppercase">Optimización [cite: 32]</p>
                     <h3 class="text-2xl font-black text-blue-500">89%</h3>
                 </div>
             </div>
-            <div class="bg-white p-2 rounded-2xl shadow-lg border border-gray-200">
+
+            <div class="bg-white p-2 rounded-xl shadow-lg border">
                 <div id="map"></div>
             </div>
         </section>
 
-        <section id="estadisticas" class="content-section">
-            <header class="mb-8">
-                <h2 class="text-2xl font-extrabold text-gray-800 uppercase">Análisis de Residuos y Ahorro</h2>
-            </header>
-            <div class="bg-white p-8 rounded-2xl shadow-lg border border-gray-200">
-                <canvas id="myChart"></canvas>
+        <section id="stats" class="seccion">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6 uppercase">Estadísticas de Ahorro</h2>
+            <div class="bg-white p-8 rounded-xl shadow-lg border">
+                <canvas id="graficaResiduos"></canvas>
             </div>
         </section>
 
-        <section id="configuracion" class="content-section">
-            <header class="mb-8">
-                <h2 class="text-2xl font-extrabold text-gray-800 uppercase">Configuración del Sistema</h2>
-            </header>
-            <div class="bg-white p-8 rounded-2xl shadow-lg border border-gray-200">
-                <h3 class="text-xl font-bold mb-4">Sensores LoRaWAN</h3>
-                <p class="mb-4">Estado de la pasarela: <span class="text-green-500 font-bold">CONECTADO</span></p>
-                <button class="bg-emerald-600 text-white px-4 py-2 rounded-lg">Escanear nuevos dispositivos</button>
+        <section id="config" class="seccion">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6 uppercase">Configuración de Sensores LoRaWAN</h2>
+            <div class="bg-white p-8 rounded-xl shadow-lg border">
+                <div class="space-y-4">
+                    <div class="flex justify-between items-center p-4 bg-gray-50 rounded-lg">
+                        <span>Estado de la red</span>
+                        <span class="text-green-600 font-bold">Activa</span>
+                    </div>
+                    <div class="flex justify-between items-center p-4 bg-gray-50 rounded-lg">
+                        <span>Sensores detectados</span>
+                        <span class="font-bold">15 dispositivos [cite: 12, 29]</span>
+                    </div>
+                    <button class="bg-emerald-800 text-white px-6 py-2 rounded-lg hover:bg-emerald-900">Escanear nuevos sensores</button>
+                </div>
             </div>
         </section>
 
@@ -78,39 +88,39 @@
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
-        // LÓGICA PARA CAMBIAR ENTRE SECCIONES
-        function showSection(sectionId) {
-            document.querySelectorAll('.content-section').forEach(section => {
-                section.classList.remove('active');
-            });
-            document.getElementById(sectionId).classList.add('active');
+        // FUNCIÓN PARA CAMBIAR ENTRE PANTALLAS
+        function cambiarSeccion(id) {
+            // Ocultamos todas las secciones
+            document.querySelectorAll('.seccion').forEach(s => s.classList.remove('activa'));
+            // Mostramos la que hemos pulsado
+            document.getElementById(id).classList.add('activa');
             
-            // Si entramos en estadísticas, cargamos la gráfica
-            if(sectionId === 'estadisticas') loadChart();
-            // Si volvemos al mapa, forzamos que se redibuje bien
-            if(sectionId === 'mapa') setTimeout(() => { map.invalidateSize() }, 100);
+            // Si pulsamos estadísticas, dibujamos la gráfica
+            if(id === 'stats') dibujarGrafica();
+            // Si volvemos al mapa, refrescamos para que no salga gris
+            if(id === 'mapa') setTimeout(() => { map.invalidateSize() }, 200);
         }
 
-        // CONFIGURACIÓN DEL MAPA
-        var map = L.map('map').setView([38.0615, -1.1965], 16);
+        // CONFIGURACIÓN DEL MAPA [cite: 16]
+        var map = L.map('map').setView([38.0615, -1.1965], 16); // Centrado en La Polvorista
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
 
-        // Marcadores (Rojo, Amarillo, Verde)
-        L.circleMarker([38.0620, -1.1970], { color: 'red', fillColor: '#f03', fillOpacity: 0.9, radius: 12 }).addTo(map).bindPopup('<b>Contenedor 01</b><br>90% - RECOGIDA URGENTE');
-        L.circleMarker([38.0610, -1.1950], { color: 'orange', fillColor: '#ff0', fillOpacity: 0.9, radius: 10 }).addTo(map).bindPopup('<b>Contenedor 02</b><br>50% - Pendiente');
-        L.circleMarker([38.0630, -1.1980], { color: 'green', fillColor: '#0f0', fillOpacity: 0.9, radius: 10 }).addTo(map).bindPopup('<b>Contenedor 03</b><br>10% - Vacío');
+        // Marcadores de colores según tu diseño [cite: 17, 18, 19]
+        L.circleMarker([38.0620, -1.1970], { color: 'red', fillColor: '#f03', fillOpacity: 0.9, radius: 12 }).addTo(map).bindPopup('<b>90% Lleno</b><br>Recogida Urgente [cite: 17]');
+        L.circleMarker([38.0610, -1.1950], { color: 'orange', fillColor: '#ff0', fillOpacity: 0.9, radius: 10 }).addTo(map).bindPopup('<b>50% Lleno</b><br>Pendiente [cite: 18]');
+        L.circleMarker([38.0630, -1.1980], { color: 'green', fillColor: '#0f0', fillOpacity: 0.9, radius: 10 }).addTo(map).bindPopup('<b>Vacío</b><br>No pasar [cite: 19]');
 
-        // CONFIGURACIÓN DE LA GRÁFICA
-        function loadChart() {
-            const ctx = document.getElementById('myChart');
-            if (window.builtChart) window.builtChart.destroy(); // Evita errores al recargar
-            window.builtChart = new Chart(ctx, {
+        // CONFIGURACIÓN DE LA GRÁFICA 
+        function dibujarGrafica() {
+            const ctx = document.getElementById('graficaResiduos');
+            if (window.miGrafica) window.miGrafica.destroy();
+            window.miGrafica = new Chart(ctx, {
                 type: 'bar',
                 data: {
                     labels: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun'],
                     datasets: [{
-                        label: 'Ahorro en €',
-                        data: [800, 950, 1100, 1050, 1200, 1350],
+                        label: 'Euros Ahorrados (€)',
+                        data: [700, 850, 1000, 950, 1100, 1200],
                         backgroundColor: '#10b981'
                     }]
                 }
