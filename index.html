@@ -3,12 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EcoMolina Industrial - Dashboard de Gestión</title>
+    <title>EcoMolina Industrial - Dashboard Interactivo</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        #map { height: 500px; width: 100%; border-radius: 12px; z-index: 1; }
-        .sidebar { background-color: #16423C; } /* Verde oscuro industrial de tu diseño */
+        #map { height: 500px; width: 100%; border-radius: 12px; }
+        .sidebar { background-color: #16423C; }
+        .content-section { display: none; }
+        .content-section.active { display: block; }
     </style>
 </head>
 <body class="bg-gray-50 flex h-screen font-sans">
@@ -20,78 +23,99 @@
         </div>
         
         <nav class="flex-1 space-y-4 text-sm font-medium">
-            <a href="#" class="flex items-center space-x-3 p-3 bg-emerald-800 rounded-lg"><span>🏠</span> <span>Inicio</span></a>
-            <a href="#" class="flex items-center space-x-3 p-3 hover:bg-emerald-700 rounded-lg transition"><span>📍</span> <span>Mapa en Vivo</span></a>
-            <a href="#" class="flex items-center space-x-3 p-3 hover:bg-emerald-700 rounded-lg transition"><span>📊</span> <span>Estadísticas</span></a>
-            <a href="#" class="flex items-center space-x-3 p-3 hover:bg-emerald-700 rounded-lg transition"><span>📄</span> <span>Reportes ESG</span></a>
-            <a href="#" class="flex items-center space-x-3 p-3 hover:bg-emerald-700 rounded-lg transition"><span>⚙️</span> <span>Configuración</span></a>
+            <button onclick="showSection('mapa')" class="w-full flex items-center space-x-3 p-3 hover:bg-emerald-700 rounded-lg transition"><span>📍</span> <span>Mapa en Vivo</span></button>
+            <button onclick="showSection('estadisticas')" class="w-full flex items-center space-x-3 p-3 hover:bg-emerald-700 rounded-lg transition"><span>📊</span> <span>Estadísticas</span></button>
+            <button onclick="showSection('configuracion')" class="w-full flex items-center space-x-3 p-3 hover:bg-emerald-700 rounded-lg transition"><span>⚙️</span> <span>Configuración</span></button>
         </nav>
-        
-        <div class="mt-auto pt-6 border-t border-emerald-800 text-xs text-emerald-300">
-            © 2026 EcoMolina Industrial
-        </div>
     </aside>
 
     <main class="flex-1 overflow-y-auto p-8">
-        <header class="mb-8">
-            <h2 class="text-2xl font-extrabold text-gray-800 uppercase">MAPA EN VIVO - POLÍGONO LA POLVORISTA</h2>
-            <p class="text-gray-500 text-sm">Monitoreo en tiempo real de contenedores inteligentes</p>
-        </header>
-
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
-                <p class="text-xs font-bold text-gray-400 uppercase mb-1">Recogida Hoy</p>
-                <h3 class="text-2xl font-black text-gray-800">15 Contenedores</h3>
-            </div>
-            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
-                <p class="text-xs font-bold text-gray-400 uppercase mb-1">Ahorro Mensual</p>
-                <h3 class="text-2xl font-black text-emerald-600">€1,200</h3>
-            </div>
-            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
-                <p class="text-xs font-bold text-gray-400 uppercase mb-1">Ahorro Mensual (CO2)</p>
-                <h3 class="text-2xl font-black text-emerald-600">85 kg</h3>
-            </div>
-            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col items-center">
-                <div class="relative flex items-center justify-center">
-                    <svg class="w-16 h-16">
-                        <circle class="text-gray-200" stroke-width="5" stroke="currentColor" fill="transparent" r="28" cx="32" cy="32"/>
-                        <circle class="text-blue-500" stroke-width="5" stroke-dasharray="175" stroke-dashoffset="30" stroke-linecap="round" stroke="currentColor" fill="transparent" r="28" cx="32" cy="32"/>
-                    </svg>
-                    <span class="absolute text-sm font-bold">89%</span>
+        
+        <section id="mapa" class="content-section active">
+            <header class="mb-8">
+                <h2 class="text-2xl font-extrabold text-gray-800 uppercase">MAPA EN VIVO - POLÍGONO LA POLVORISTA</h2>
+            </header>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 text-center">
+                    <p class="text-xs font-bold text-gray-400 uppercase">Ahorro Mensual</p>
+                    <h3 class="text-2xl font-black text-emerald-600">€1,200</h3>
                 </div>
-                <p class="text-[10px] font-bold text-gray-400 uppercase mt-2">CO2 EVITADO</p>
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 text-center">
+                    <p class="text-xs font-bold text-gray-400 uppercase">CO2 Evitado</p>
+                    <h3 class="text-2xl font-black text-emerald-600">85 kg</h3>
+                </div>
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 text-center">
+                    <p class="text-xs font-bold text-gray-400 uppercase">Optimización</p>
+                    <h3 class="text-2xl font-black text-blue-500">89%</h3>
+                </div>
             </div>
-        </div>
+            <div class="bg-white p-2 rounded-2xl shadow-lg border border-gray-200">
+                <div id="map"></div>
+            </div>
+        </section>
 
-        <div class="bg-white p-2 rounded-2xl shadow-lg border border-gray-200">
-            <div id="map"></div>
-        </div>
+        <section id="estadisticas" class="content-section">
+            <header class="mb-8">
+                <h2 class="text-2xl font-extrabold text-gray-800 uppercase">Análisis de Residuos y Ahorro</h2>
+            </header>
+            <div class="bg-white p-8 rounded-2xl shadow-lg border border-gray-200">
+                <canvas id="myChart"></canvas>
+            </div>
+        </section>
+
+        <section id="configuracion" class="content-section">
+            <header class="mb-8">
+                <h2 class="text-2xl font-extrabold text-gray-800 uppercase">Configuración del Sistema</h2>
+            </header>
+            <div class="bg-white p-8 rounded-2xl shadow-lg border border-gray-200">
+                <h3 class="text-xl font-bold mb-4">Sensores LoRaWAN</h3>
+                <p class="mb-4">Estado de la pasarela: <span class="text-green-500 font-bold">CONECTADO</span></p>
+                <button class="bg-emerald-600 text-white px-4 py-2 rounded-lg">Escanear nuevos dispositivos</button>
+            </div>
+        </section>
+
     </main>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
-        // Coordenadas del Polígono La Polvorista, Molina de Segura
-        var poligonoLat = 38.0615;
-        var poligonoLon = -1.1965;
+        // LÓGICA PARA CAMBIAR ENTRE SECCIONES
+        function showSection(sectionId) {
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            document.getElementById(sectionId).classList.add('active');
+            
+            // Si entramos en estadísticas, cargamos la gráfica
+            if(sectionId === 'estadisticas') loadChart();
+            // Si volvemos al mapa, forzamos que se redibuje bien
+            if(sectionId === 'mapa') setTimeout(() => { map.invalidateSize() }, 100);
+        }
 
-        var map = L.map('map').setView([poligonoLat, poligonoLon], 16);
+        // CONFIGURACIÓN DEL MAPA
+        var map = L.map('map').setView([38.0615, -1.1965], 16);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
 
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '© OpenStreetMap'
-        }).addTo(map);
+        // Marcadores (Rojo, Amarillo, Verde)
+        L.circleMarker([38.0620, -1.1970], { color: 'red', fillColor: '#f03', fillOpacity: 0.9, radius: 12 }).addTo(map).bindPopup('<b>Contenedor 01</b><br>90% - RECOGIDA URGENTE');
+        L.circleMarker([38.0610, -1.1950], { color: 'orange', fillColor: '#ff0', fillOpacity: 0.9, radius: 10 }).addTo(map).bindPopup('<b>Contenedor 02</b><br>50% - Pendiente');
+        L.circleMarker([38.0630, -1.1980], { color: 'green', fillColor: '#0f0', fillOpacity: 0.9, radius: 10 }).addTo(map).bindPopup('<b>Contenedor 03</b><br>10% - Vacío');
 
-        // Marcadores basados en tus chinchetas de colores
-        // ROJO: Recogida urgente (90%)
-        L.circleMarker([38.0620, -1.1970], { color: 'red', fillColor: '#f03', fillOpacity: 0.9, radius: 12 })
-            .addTo(map).bindPopup('<b>Contenedor 01</b><br>Nivel: 90% (Urgente)');
-
-        // AMARILLO: Pendiente (50%)
-        L.circleMarker([38.0610, -1.1950], { color: 'orange', fillColor: '#ff0', fillOpacity: 0.9, radius: 10 })
-            .addTo(map).bindPopup('<b>Contenedor 02</b><br>Nivel: 50% (Pendiente)');
-
-        // VERDE: Vacío
-        L.circleMarker([38.0630, -1.1980], { color: 'green', fillColor: '#0f0', fillOpacity: 0.9, radius: 10 })
-            .addTo(map).bindPopup('<b>Contenedor 03</b><br>Nivel: 10% (Vacío)');
+        // CONFIGURACIÓN DE LA GRÁFICA
+        function loadChart() {
+            const ctx = document.getElementById('myChart');
+            if (window.builtChart) window.builtChart.destroy(); // Evita errores al recargar
+            window.builtChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun'],
+                    datasets: [{
+                        label: 'Ahorro en €',
+                        data: [800, 950, 1100, 1050, 1200, 1350],
+                        backgroundColor: '#10b981'
+                    }]
+                }
+            });
+        }
     </script>
 </body>
 </html>
