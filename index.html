@@ -3,122 +3,64 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Molina Ciudad Inteligente - Red Global</title>
+    <title>Molina Smart City - Interactiva</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        #map { height: 650px; width: 100%; border-radius: 24px; z-index: 1; }
+        #map { height: 600px; width: 100%; border-radius: 24px; }
         .sidebar { background-color: #064e3b; }
         .seccion { display: none; }
         .seccion.activa { display: block; }
-        .logo-anim { animation: float 3s ease-in-out infinite; }
-        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+        /* Animación para el mensaje de éxito */
+        #mensajeExito { display: none; }
+        .animar-entrada { animation: slideIn 0.5s ease-out; }
+        @keyframes slideIn { from { transform: translateY(-20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
     </style>
 </head>
 <body class="bg-slate-50 flex h-screen font-sans overflow-hidden">
 
     <aside class="w-80 sidebar text-white flex flex-col p-8 shadow-2xl">
         <div class="mb-12 flex flex-col items-center">
-            <div class="logo-anim bg-emerald-400 p-4 rounded-3xl mb-4 shadow-xl shadow-emerald-900/40">
-                <svg width="45" height="45" viewBox="0 0 24 24" fill="none" stroke="#064e3b" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8a7 7 0 0 1-7 7c-1.18 0-2.34-.31-3.35-.86L11 20z"></path>
-                    <circle cx="12" cy="12" r="1" fill="#064e3b"></circle>
-                </svg>
+            <div class="bg-emerald-400 p-4 rounded-3xl mb-4">
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#064e3b" stroke-width="2.5"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8a7 7 0 0 1-7 7c-1.18 0-2.34-.31-3.35-.86L11 20z"></path></svg>
             </div>
-            <h1 class="text-2xl font-black tracking-tighter text-center leading-tight">
-                MOLINA <span class="text-emerald-400 block text-xs tracking-[0.3em] mt-1 font-bold">SMART CITY</span>
-            </h1>
+            <h1 class="text-2xl font-black text-center">MOLINA <span class="text-emerald-400 block text-xs tracking-widest uppercase">Smart City</span></h1>
         </div>
-        
         <nav class="flex-1 space-y-3">
-            <button onclick="cambiarSeccion('mapa')" class="w-full text-left flex items-center space-x-4 p-4 hover:bg-emerald-800/50 rounded-2xl transition-all group">
-                <span class="text-xl group-hover:scale-110 transition">📍</span> <span class="font-bold">Mapa Ciudadano</span>
-            </button>
-            <button onclick="cambiarSeccion('avisos')" class="w-full text-left flex items-center space-x-4 p-4 hover:bg-emerald-800/50 rounded-2xl transition-all group">
-                <span class="text-xl group-hover:scale-110 transition">📢</span> <span class="font-bold">Aviso de Incidencia</span>
-            </button>
-            <button onclick="cambiarSeccion('impacto')" class="w-full text-left flex items-center space-x-4 p-4 hover:bg-emerald-800/50 rounded-2xl transition-all group">
-                <span class="text-xl group-hover:scale-110 transition">🌿</span> <span class="font-bold">Impacto Ambiental</span>
-            </button>
+            <button onclick="cambiarSeccion('mapa')" class="w-full text-left flex items-center space-x-4 p-4 hover:bg-emerald-800 rounded-2xl transition font-bold"><span>📍</span> <span>Mapa de Ciudad</span></button>
+            <button onclick="cambiarSeccion('avisos')" class="w-full text-left flex items-center space-x-4 p-4 hover:bg-emerald-800 rounded-2xl transition font-bold"><span>📢</span> <span>Aviso Ciudadano</span></button>
         </nav>
-
-        <div class="mt-auto p-5 bg-emerald-900/40 rounded-3xl border border-emerald-700/30">
-            <p class="text-[10px] uppercase tracking-widest text-emerald-400 font-black mb-2">Estado del Sistema</p>
-            <div class="flex items-center space-x-2">
-                <span class="flex h-2 w-2 rounded-full bg-emerald-400 animate-ping"></span>
-                <span class="text-xs font-bold text-emerald-100 italic">Red LoRaWAN Online</span>
-            </div>
-        </div>
     </aside>
 
-    <main class="flex-1 overflow-y-auto p-12">
+    <main class="flex-1 overflow-y-auto p-12 relative">
         
+        <div id="mensajeExito" class="absolute top-10 left-1/2 -translate-x-1/2 z-[1000] bg-emerald-600 text-white px-8 py-4 rounded-full shadow-2xl font-bold animar-entrada">
+            ✅ ¡Reporte enviado con éxito al Ayuntamiento de Molina!
+        </div>
+
         <section id="mapa" class="seccion activa">
-            <div class="flex justify-between items-start mb-10">
-                <div>
-                    <h2 class="text-4xl font-black text-slate-800 tracking-tight">Red de Contenedores</h2>
-                    <p class="text-slate-500 text-lg mt-1 font-medium italic">Casco Urbano de Molina de Segura</p>
-                </div>
-                <div class="flex space-x-4">
-                    <div class="bg-white px-6 py-3 rounded-2xl shadow-sm border border-slate-100 text-center">
-                        <p class="text-[10px] font-bold text-slate-400 uppercase">Sensores Activos</p>
-                        <p class="text-xl font-black text-slate-700">120</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="bg-white p-4 rounded-[2.5rem] shadow-2xl border border-slate-100 mb-6">
-                <div id="map"></div>
-            </div>
-        </section>
-
-        <section id="impacto" class="seccion">
-            <h2 class="text-4xl font-black text-slate-800 mb-10 tracking-tight italic">Nuestro Impacto Verde 🌿</h2>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
-                <div class="bg-white p-10 rounded-[2.5rem] shadow-xl border border-emerald-50">
-                    <div class="flex items-center justify-between mb-6">
-                        <h3 class="text-xl font-bold text-slate-700 italic">CO2 Evitado</h3>
-                        <span class="text-4xl">📉</span>
-                    </div>
-                    <div class="flex items-baseline space-x-2">
-                        <span class="text-6xl font-black text-emerald-600">85</span>
-                        <span class="text-2xl font-bold text-emerald-800">kg / mes</span>
-                    </div>
-                    <p class="mt-4 text-slate-500 font-medium italic">Equivalente a plantar 4 árboles nuevos cada mes en Molina.</p>
-                </div>
-
-                <div class="bg-white p-10 rounded-[2.5rem] shadow-xl border border-slate-50">
-                    <h3 class="text-xl font-bold text-slate-700 mb-6 italic text-center">Eficiencia de Recogida</h3>
-                    <canvas id="graficaImpacto" height="150"></canvas>
-                </div>
-            </div>
+            <h2 class="text-4xl font-black text-slate-800 mb-8">Red de Contenedores</h2>
+            <div class="bg-white p-4 rounded-[2.5rem] shadow-2xl border border-slate-100"><div id="map"></div></div>
         </section>
 
         <section id="avisos" class="seccion">
-            <h2 class="text-4xl font-black text-slate-800 mb-6">Canal de Incidencias</h2>
-            <div class="bg-white p-10 rounded-[3rem] shadow-2xl border border-slate-100 max-w-3xl">
-                <p class="text-xl text-slate-500 mb-8 italic font-medium">Ayúdanos a mantener Molina limpia reportando problemas en tiempo real.</p>
-                <div class="grid grid-cols-3 gap-6 mb-8">
-                    <button class="p-6 bg-slate-50 rounded-3xl border-2 border-transparent hover:border-emerald-500 transition-all text-center group">
-                        <span class="text-4xl block mb-2 group-hover:scale-110 transition">🚨</span>
-                        <span class="text-xs font-black uppercase tracking-widest text-slate-600">Lleno</span>
-                    </button>
-                    <button class="p-6 bg-slate-50 rounded-3xl border-2 border-transparent hover:border-amber-500 transition-all text-center group">
-                        <span class="text-4xl block mb-2 group-hover:scale-110 transition">💨</span>
-                        <span class="text-xs font-black uppercase tracking-widest text-slate-600">Olor</span>
-                    </button>
-                    <button class="p-6 bg-slate-50 rounded-3xl border-2 border-transparent hover:border-blue-500 transition-all text-center group">
-                        <span class="text-4xl block mb-2 group-hover:scale-110 transition">🔨</span>
-                        <span class="text-xs font-black uppercase tracking-widest text-slate-600">Roto</span>
-                    </button>
-                </div>
-                <input type="text" placeholder="Escribe la calle o zona..." class="w-full p-6 bg-slate-50 rounded-2xl mb-4 border-2 border-slate-100 focus:border-emerald-500 focus:outline-none text-lg">
-                <button class="w-full bg-emerald-600 text-white font-black py-6 rounded-2xl shadow-xl shadow-emerald-200 hover:bg-emerald-700 transition-all text-xl uppercase">Enviar Reporte Ciudadano</button>
+            <h2 class="text-4xl font-black text-slate-800 mb-6 uppercase">Reportar Incidencia</h2>
+            <div class="bg-white p-10 rounded-[3rem] shadow-2xl border border-slate-100 max-w-2xl">
+                <p class="text-lg text-slate-500 mb-8 font-medium italic">Selecciona el problema y escribe la ubicación para probar el sistema.</p>
+                <form id="formularioAviso" class="space-y-6" onsubmit="event.preventDefault(); procesarReporte();">
+                    <div class="grid grid-cols-2 gap-4">
+                        <button type="button" onclick="this.style.borderColor='#10b981'" class="p-6 bg-slate-50 rounded-3xl border-2 border-transparent hover:border-emerald-500 transition-all text-center">
+                            <span class="text-4xl block mb-2">🗑️</span><span class="text-xs font-black uppercase text-slate-600">Lleno</span>
+                        </button>
+                        <button type="button" onclick="this.style.borderColor='#ef4444'" class="p-6 bg-slate-50 rounded-3xl border-2 border-transparent hover:border-red-500 transition-all text-center">
+                            <span class="text-4xl block mb-2">💨</span><span class="text-xs font-black uppercase text-slate-600">Mal Olor</span>
+                        </button>
+                    </div>
+                    <input type="text" id="inputCalle" required placeholder="Escribe tu calle..." class="w-full p-6 bg-slate-50 rounded-2xl border-2 border-slate-100 focus:border-emerald-500 focus:outline-none text-lg">
+                    <button type="submit" class="w-full bg-emerald-600 text-white font-black py-6 rounded-2xl shadow-xl hover:bg-emerald-700 transition-all text-xl uppercase tracking-widest">Enviar Reporte</button>
+                </form>
             </div>
         </section>
-
     </main>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -126,67 +68,27 @@
         function cambiarSeccion(id) {
             document.querySelectorAll('.seccion').forEach(s => s.classList.remove('activa'));
             document.getElementById(id).classList.add('activa');
-            if(id === 'impacto') cargarGraficaImpacto();
             if(id === 'mapa') setTimeout(() => { map.invalidateSize() }, 200);
+        }
+
+        // Simular el envío
+        function procesarReporte() {
+            const calle = document.getElementById('inputCalle').value;
+            const mensaje = document.getElementById('mensajeExito');
+            
+            if(calle) {
+                mensaje.style.display = 'block';
+                document.getElementById('formularioAviso').reset(); // Limpia el formulario
+                
+                // Ocultar el mensaje después de 4 segundos
+                setTimeout(() => { mensaje.style.display = 'none'; }, 4000);
+            }
         }
 
         var map = L.map('map').setView([38.0535, -1.2135], 15);
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
-
-        function addP(lat, lon, col, msg) {
-            L.circleMarker([lat, lon], { color: col, fillColor: col, fillOpacity: 0.8, radius: 9, weight: 2 })
-            .addTo(map).bindPopup("<div class='font-bold text-slate-700 p-1'>"+msg+"</div>");
-        }
-
-        // GENERACIÓN MASIVA DE PUNTOS (30+ PUNTOS)
-        // VERDES (Disponibles)
-        addP(38.0540, -1.2140, '#10b981', 'Plaza de España - Vacío');
-        addP(38.0510, -1.2150, '#10b981', 'Teatro Villa de Molina - Vacío');
-        addP(38.0565, -1.2110, '#10b981', 'C. Jesuita Hernández - Vacío');
-        addP(38.0500, -1.2120, '#10b981', 'Barrio del Castillo - Vacío');
-        addP(38.0580, -1.2150, '#10b981', 'Av. del Chorrico - Disponible');
-        addP(38.0530, -1.2190, '#10b981', 'Calle San Juan - Disponible');
-        addP(38.0490, -1.2180, '#10b981', 'Zona Sur - Disponible');
-        addP(38.0555, -1.2080, '#10b981', 'Av. Gutiérrez Mellado - Vacío');
-
-        // AMARILLOS (Medios)
-        addP(38.0525, -1.2120, '#f59e0b', 'Calle Mayor - 50%');
-        addP(38.0545, -1.2160, '#f59e0b', 'C. San Vicente - 45%');
-        addP(38.0570, -1.2130, '#f59e0b', 'Parque de la Compañía II - 60%');
-        addP(38.0515, -1.2090, '#f59e0b', 'C. Pensionista - 55%');
-        addP(38.0520, -1.2170, '#f59e0b', 'C. Serrerías - 40%');
-
-        // ROJOS (Llenos)
-        addP(38.0550, -1.2100, '#ef4444', 'Parque de la Compañía - 95% LLENO');
-        addP(38.0560, -1.2180, '#ef4444', 'Av. de Madrid - RECOGIDA URGENTE');
-        addP(38.0535, -1.2165, '#ef4444', 'Plaza de la Cerámica - 90%');
-        addP(38.0505, -1.2135, '#ef4444', 'C. Consuelo - LLENO');
-        addP(38.0590, -1.2120, '#ef4444', 'C. Menéndez Pidal - LLENO');
-
-        // MÁS PUNTOS POR TODO EL MAPA
-        for(let i=0; i<15; i++){
-            let lt = 38.048 + Math.random() * 0.012;
-            let ln = -1.220 + Math.random() * 0.015;
-            let cls = Math.random() > 0.5 ? '#10b981' : '#f59e0b';
-            addP(lt, ln, cls, 'Punto Vecinal Activo');
-        }
-
-        function cargarGraficaImpacto() {
-            const ctx = document.getElementById('graficaImpacto');
-            if (window.gImp) window.gImp.destroy();
-            window.gImp = new Chart(ctx, {
-                type: 'doughnut',
-                data: {
-                    labels: ['Optimizado', 'Pendiente'],
-                    datasets: [{
-                        data: [89, 11],
-                        backgroundColor: ['#10b981', '#f1f5f9'],
-                        borderWidth: 0
-                    }]
-                },
-                options: { cutout: '80%' }
-            });
-        }
+        L.circleMarker([38.0540, -1.2140], { color: '#10b981', fillColor: '#10b981', fillOpacity: 0.8, radius: 10 }).addTo(map).bindPopup("Plaza de España");
+        L.circleMarker([38.0525, -1.2120], { color: '#ef4444', fillColor: '#ef4444', fillOpacity: 0.8, radius: 10 }).addTo(map).bindPopup("Calle Mayor - LLENO");
     </script>
 </body>
 </html>
