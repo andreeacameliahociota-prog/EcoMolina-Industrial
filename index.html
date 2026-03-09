@@ -6,41 +6,79 @@
     <title>Productos María Luisa - Molina de Segura</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        .bg-maria { background-color: #5d4037; }
-        .btn-pedido { background-color: #25d366; }
+        .bg-maria { background-color: #5d4037; } /* Marrón especia */
+        .btn-añadir { background-color: #f3e5f5; color: #4a148c; }
+        .btn-whatsapp { background-color: #25d366; }
     </style>
 </head>
 <body class="bg-stone-50 font-sans">
 
-    <header class="bg-maria text-white p-10 shadow-lg text-center">
-        <h1 class="text-4xl font-serif font-bold italic">Productos María Luisa</h1>
-        <p class="text-orange-200 tracking-widest text-sm uppercase mt-2">Especias y Condimentos · Calle Estación</p>
+    <header class="bg-maria text-white p-8 shadow-lg text-center">
+        <div class="flex flex-col items-center">
+            <div class="bg-white p-4 rounded-full mb-4 shadow-inner">
+                <svg width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="#5d4037" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
+                </svg>
+            </div>
+            <h1 class="text-3xl font-serif font-bold italic">Productos María Luisa</h1>
+            <p class="text-orange-200 tracking-widest text-xs uppercase mt-2">Molina de Segura · Calle Estación</p>
+        </div>
     </header>
 
     <main class="container mx-auto p-6 max-w-2xl">
         <div class="bg-white p-8 rounded-[2rem] shadow-xl text-center mb-8 border-b-4 border-orange-400">
-            <h2 class="text-xl font-bold">🛒 Haz tu pedido por WhatsApp</h2>
-            <p class="text-gray-500 text-sm">Añade productos y envía la lista sin llamadas.</p>
+            <h2 class="text-xl font-bold">🌿 Catálogo de Especias</h2>
+            <p class="text-gray-500 text-sm italic">Selecciona los productos para tu pedido</p>
         </div>
 
-        <div class="space-y-4">
-            <div class="bg-white p-5 rounded-2xl shadow-sm border flex justify-between items-center">
-                <span><b>Pimentón</b> (3,50€)</span>
-                <button onclick="add('Pimentón', 3.5)" class="bg-orange-100 text-orange-800 px-4 py-2 rounded-xl font-bold">+ Añadir</button>
+        <div class="space-y-3" id="lista-productos">
+            <div class="bg-white p-4 rounded-2xl shadow-sm border flex justify-between items-center">
+                <span class="font-bold">Pimentón Dulce</span>
+                <div class="flex items-center gap-4">
+                    <span class="text-gray-600">3,50€</span>
+                    <button onclick="add('Pimentón Dulce', 3.5)" class="bg-orange-100 text-orange-800 px-4 py-2 rounded-xl font-bold hover:bg-orange-200">+ Añadir</button>
+                </div>
             </div>
-            <div class="bg-white p-5 rounded-2xl shadow-sm border flex justify-between items-center">
-                <span><b>Azafrán</b> (5,00€)</span>
-                <button onclick="add('Azafrán', 5.0)" class="bg-orange-100 text-orange-800 px-4 py-2 rounded-xl font-bold">+ Añadir</button>
+            <div class="bg-white p-4 rounded-2xl shadow-sm border flex justify-between items-center">
+                <span class="font-bold">Azafrán en Hebra</span>
+                <div class="flex items-center gap-4">
+                    <span class="text-gray-600">5,00€</span>
+                    <button onclick="add('Azafrán Hebra', 5.0)" class="bg-orange-100 text-orange-800 px-4 py-2 rounded-xl font-bold hover:bg-orange-200">+ Añadir</button>
+                </div>
+            </div>
+            <div class="bg-white p-4 rounded-2xl shadow-sm border flex justify-between items-center">
+                <span class="font-bold">Canela en Rama</span>
+                <div class="flex items-center gap-4">
+                    <span class="text-gray-600">2,80€</span>
+                    <button onclick="add('Canela Rama', 2.8)" class="bg-orange-100 text-orange-800 px-4 py-2 rounded-xl font-bold hover:bg-orange-200">+ Añadir</button>
+                </div>
+            </div>
+            <div class="bg-white p-4 rounded-2xl shadow-sm border flex justify-between items-center">
+                <span class="font-bold">Pimienta Negra Molida</span>
+                <div class="flex items-center gap-4">
+                    <span class="text-gray-600">2,50€</span>
+                    <button onclick="add('Pimienta Negra', 2.5)" class="bg-orange-100 text-orange-800 px-4 py-2 rounded-xl font-bold hover:bg-orange-200">+ Añadir</button>
+                </div>
+            </div>
+            <div class="bg-white p-4 rounded-2xl shadow-sm border flex justify-between items-center">
+                <span class="font-bold">Orégano de la Sierra</span>
+                <div class="flex items-center gap-4">
+                    <span class="text-gray-600">1,90€</span>
+                    <button onclick="add('Orégano', 1.9)" class="bg-orange-100 text-orange-800 px-4 py-2 rounded-xl font-bold hover:bg-orange-200">+ Añadir</button>
+                </div>
             </div>
         </div>
 
-        <div class="mt-10 bg-white p-8 rounded-[2rem] shadow-2xl border-2 border-orange-100 text-center">
-            <p class="text-gray-400 mb-2 uppercase text-xs font-bold">Tu Cesta:</p>
-            <div id="cesta" class="font-medium text-gray-700 mb-4">Vacía</div>
-            <div class="text-3xl font-black mb-6 text-stone-800"><span id="total">0.00</span>€</div>
+        <div class="mt-8 bg-white p-8 rounded-[2rem] shadow-2xl border-2 border-orange-100">
+            <h3 class="text-lg font-black mb-2 text-stone-800 uppercase tracking-tighter">Tu Pedido Actual:</h3>
+            <div id="cesta" class="text-gray-600 mb-4 min-h-[40px] italic">Tu cesta está vacía...</div>
+            <div class="flex justify-between items-center border-t pt-4">
+                <span class="text-gray-400 font-bold">TOTAL:</span>
+                <span class="text-3xl font-black text-stone-900"><span id="total">0.00</span>€</span>
+            </div>
             
-            <button onclick="enviar()" class="btn-pedido w-full text-white font-black py-5 rounded-2xl shadow-lg text-xl">
-                ENVIAR PEDIDO 📱
+            <button onclick="enviar()" class="btn-whatsapp w-full text-white font-black py-5 rounded-2xl shadow-lg text-xl mt-6 hover:scale-105 transition-transform">
+                📱 ENVIAR POR WHATSAPP
             </button>
         </div>
     </main>
@@ -53,8 +91,8 @@
             document.getElementById('total').innerText = total.toFixed(2);
         }
         function enviar() {
-            if(items.length === 0) return alert("Cesta vacía");
-            let msg = encodeURIComponent("Hola María Luisa, quiero pedir: " + items.join(', ') + ". Total: " + total.toFixed(2) + "€");
+            if(items.length === 0) return alert("Por favor, añade productos primero.");
+            let msg = encodeURIComponent("Hola Productos María Luisa, me gustaría pedir: " + items.join(', ') + ". Total: " + total.toFixed(2) + "€");
             window.open("https://wa.me/34664417137?text=" + msg);
         }
     </script>
